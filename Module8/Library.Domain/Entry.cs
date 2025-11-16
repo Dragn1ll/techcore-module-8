@@ -24,6 +24,7 @@ public static class Entry
         {
             c.BaseAddress = new Uri("https://api.coindesk.com/");
         })
+        .AddPolicyHandler(Policy.TimeoutAsync<HttpResponseMessage>(TimeSpan.FromSeconds(3)))
         .AddTransientHttpErrorPolicy(p => 
             p.WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(1))
         )
