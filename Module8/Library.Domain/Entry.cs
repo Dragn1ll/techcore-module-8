@@ -11,8 +11,12 @@ public static class Entry
     {
         serviceCollection.AddScoped<IBookService, BookService>();
         serviceCollection.AddSingleton<IReviewService, ReviewService>();
-        
-        serviceCollection.AddHttpClient();
+        serviceCollection.AddScoped<IAuthorService, AuthorService>();
+
+        serviceCollection.AddHttpClient<IAuthorService, AuthorService>(c =>
+        {
+            c.BaseAddress = new Uri("https://api.coindesk.com/");
+        });
 
         return serviceCollection;
     }
