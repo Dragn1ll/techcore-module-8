@@ -20,6 +20,9 @@ public static class Entry
         })
         .AddTransientHttpErrorPolicy(p => 
             p.WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(1))
+        )
+        .AddTransientHttpErrorPolicy(p =>
+            p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30))
         );
 
         return serviceCollection;
