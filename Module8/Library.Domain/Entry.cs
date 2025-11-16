@@ -2,6 +2,7 @@
 using Library.Domain.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Polly;
 
 namespace Library.Domain;
 
@@ -16,7 +17,10 @@ public static class Entry
         serviceCollection.AddHttpClient<IAuthorService, AuthorService>(c =>
         {
             c.BaseAddress = new Uri("https://api.coindesk.com/");
-        });
+        })
+        .AddTransientHttpErrorPolicy(p => 
+            p.WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(1))
+        );
 
         return serviceCollection;
     }
