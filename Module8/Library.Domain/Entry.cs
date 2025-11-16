@@ -11,6 +11,8 @@ public static class Entry
     {
         serviceCollection.AddScoped<IBookService, BookService>();
         serviceCollection.AddSingleton<IReviewService, ReviewService>();
+        
+        serviceCollection.AddHttpClient();
 
         return serviceCollection;
     }

@@ -10,4 +10,8 @@
     <ProjectReference Include="..\Library.SharedKernel\Library.SharedKernel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.0" />
+  </ItemGroup>
+
 </Project>
