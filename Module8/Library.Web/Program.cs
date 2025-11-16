@@ -21,7 +21,7 @@ public class Program
         services.AddPostgreSql(builder.Configuration);
         services.AddMongoDb(builder.Configuration);
         services.AddIdentity(builder.Configuration);
-        services.AddDomain(builder.Configuration);
+        services.AddDomain();
         services.AddRedis();
 
         services.AddMvc()
