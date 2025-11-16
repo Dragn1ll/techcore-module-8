@@ -42,4 +42,9 @@ public interface IBookService
     /// <param name="bookId">Идентификатор книги</param>
     /// <returns>Выполнилось ли удаление</returns>
     Task<Result> DeleteBook(Guid bookId);
+
+    /// <summary>
+    /// Вызвать сервис по работе с авторами
+    /// </summary>
+    Task CallAuthorServiceAsync();
 }

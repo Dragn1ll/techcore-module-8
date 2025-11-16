@@ -38,4 +38,13 @@ public class AuthorService : IAuthorService
             return Result<string>.Failure(new Error(ErrorType.ServerError, exception.Message));
         }
     }
+
+    /// <inheritdoc cref="IAuthorService.GetAuthorsAsync"/>
+    public async Task<Result<string>> GetAuthorsAsync(CancellationToken cancellationToken = default)
+    {
+        // Симуляция подключения к серверу
+        await Task.Delay(TimeSpan.FromMilliseconds(100), cancellationToken);
+        // Искусственно выбрасываем исключение для симуляции ошибки сервера
+        throw new HttpRequestException("Симуляция ошибки!");
+    }
 }

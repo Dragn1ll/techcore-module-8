@@ -7,6 +7,7 @@ using Library.SharedKernel.Utils;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using Polly.CircuitBreaker;
 
 namespace Library.Domain.Services;
 
@@ -16,13 +17,15 @@ public sealed class BookService : IBookService
     private readonly IBookRepository _bookRepository;
     private readonly IDistributedCache _cache;
     private readonly ILogger<BookService> _logger;
+    private readonly IAuthorService _authorService;
 
     public BookService(IBookRepository bookRepository, IDistributedCache cache, 
-        ILogger<BookService> logger)
+        ILogger<BookService> logger, IAuthorService authorService)
     {
         _bookRepository = bookRepository;
         _cache = cache;
         _logger = logger;
+        _authorService = authorService;
     }
 
     /// <inheritdoc cref="IBookService.CreateAsync"/>
@@ -256,6 +259,24 @@ public sealed class BookService : IBookService
 
             return Result.Failure(
                 new Error(ErrorType.ServerError, exception.Message));
+        }
+    }
+
+    /// <inheritdoc cref="IBookService.CallAuthorServiceAsync"/>
+    public async Task CallAuthorServiceAsync()
+    {
+        try
+        {
+            var result = await _authorService.GetAuthorsAsync();
+            Console.WriteLine($"Ответ сервиса по работе с авторами: {result}");
+        }
+        catch (BrokenCircuitException)
+        {
+            Console.WriteLine("Circuit breaker открыт; пропускаем вызов сервиса авторов");
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"Запрос не удался: {ex.Message}");
         }
     }
 }

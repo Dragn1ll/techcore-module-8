@@ -1,3 +1,4 @@
+using Library.Domain.Abstractions.Services;
 using Library.Domain.Abstractions.Storage;
 using Library.Domain.Models;
 using Library.Domain.Services;
@@ -12,11 +13,13 @@ public class BookServiceTests
 {
     private readonly Mock<IBookRepository> _repoMock = new();
     private readonly Mock<IDistributedCache> _cacheMock = new();
+    private readonly Mock<IAuthorService> _authorServiceMock = new();
     private readonly BookService _service;
 
     public BookServiceTests(ILoggerFactory loggerFactory)
     {
-        _service = new BookService(_repoMock.Object, _cacheMock.Object, loggerFactory.CreateLogger<BookService>());
+        _service = new BookService(_repoMock.Object, _cacheMock.Object, loggerFactory.CreateLogger<BookService>(), 
+            _authorServiceMock.Object);
     }
     
     [Fact]
